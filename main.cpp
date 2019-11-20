@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 
@@ -36,7 +37,7 @@ void showTree(Tree* t){
 }
 
 
-void insertTree(Tree** t, Info* usuario){
+void insereOrdenadoMatricula(Tree** t, Info* usuario){
 
     if(*t == NULL){
         *t = (Tree*)malloc(sizeof(Tree));
@@ -45,13 +46,29 @@ void insertTree(Tree** t, Info* usuario){
         (*t)->info = usuario;
     } else {
         if(usuario->matricula < (*t)->info->matricula){
-            insertTree(&(*t)->dir, usuario);
+            insereOrdenadoMatricula(&(*t)->dir, usuario);
         }
         if(usuario->matricula > (*t)->info->matricula){
-            insertTree(&(*t)->esq, usuario);
+            insereOrdenadoMatricula(&(*t)->esq, usuario);
         }
     }
 }
+
+void insereOrdenadoNome(Tree** t, Info* usuario){
+    if(*t == NULL){
+        *t = (Tree*)malloc(sizeof(Tree));
+        (*t)->dir = NULL;
+        (*t)->esq = NULL;
+        (*t)->info = usuario;
+    } else {
+        if(strcmp(usuario->nome, (*t)->info->nome) < 0){
+            insereOrdenadoNome(&(*t)->dir, usuario);
+        }else{
+            insereOrdenadoNome(&(*t)->esq, usuario);
+        }
+    }
+}
+
 
 int isInTree(Tree* t, int matricula) {
 
@@ -63,8 +80,8 @@ int isInTree(Tree* t, int matricula) {
 
 
 
-int main()
-{
+int main(){
+
     Tree* t = createTree();
     char flag;
     char curso[100];
@@ -87,7 +104,7 @@ int main()
         usuario1->curso = curso;
         usuario1->nome = nome;
 
-        insertTree(&t, usuario1);
+        insereOrdenadoMatricula(&t, usuario1);
     }while (flag == 'n');
 
     showTree(t);
